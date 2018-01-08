@@ -14,9 +14,8 @@ def sigmoid(x):
     s -- sigmoid(x)
     """
 
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
+    one = np.ones((1))
+    s = one / (one + np.exp(np.negative(x)))
 
     return s
 
@@ -34,10 +33,8 @@ def sigmoid_grad(s):
     ds -- Your computed gradient.
     """
 
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
-
+    one = np.ones((1))
+    ds = s * (one - s)
     return ds
 
 
@@ -71,9 +68,12 @@ def test_sigmoid():
     your tests be graded.
     """
     print("Running your tests...")
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
+    f = sigmoid(10)
+    g = sigmoid_grad(f)
+    assert np.allclose(f, [0.9999546])
+    assert np.allclose(g, [0.9999546 * (1 - 0.9999546)])
+    print("scalar sigmoid:", f)
+    print("scalar result: ", g)
 
 
 if __name__ == "__main__":
