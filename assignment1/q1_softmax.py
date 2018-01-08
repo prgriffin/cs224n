@@ -30,14 +30,21 @@ def softmax(x):
 
     if len(x.shape) > 1:
         # Matrix
-        ### YOUR CODE HERE
-        raise NotImplementedError
-        ### END YOUR CODE
+        print("x = ", x)
+        amax = np.amax(x, axis=1)
+        amax = np.reshape(amax, (amax.shape[0], 1))
+        normalized = x - amax
+        print("normalized = ", normalized)
+        e_to_x = np.exp(normalized)
+        total = np.sum(e_to_x, axis=1)
+        x = e_to_x / np.reshape(total, (total.shape[0], 1))
     else:
         # Vector
-        ### YOUR CODE HERE
-        raise NotImplementedError
-        ### END YOUR CODE
+        amax = np.amax(x)
+        normalized = x - amax
+        e_to_x = np.exp(normalized)
+        total = np.sum(e_to_x)
+        x = e_to_x / total
 
     assert x.shape == orig_shape
     return x
@@ -48,25 +55,25 @@ def test_softmax_basic():
     Some simple tests to get you started.
     Warning: these are not exhaustive.
     """
-    print "Running basic tests..."
-    test1 = softmax(np.array([1,2]))
-    print test1
+    print("Running basic tests...")
+    test1 = softmax(np.array([1, 2]))
+    print(test1)
     ans1 = np.array([0.26894142,  0.73105858])
     assert np.allclose(test1, ans1, rtol=1e-05, atol=1e-06)
 
     test2 = softmax(np.array([[1001,1002],[3,4]]))
-    print test2
+    print(test2)
     ans2 = np.array([
         [0.26894142, 0.73105858],
         [0.26894142, 0.73105858]])
     assert np.allclose(test2, ans2, rtol=1e-05, atol=1e-06)
 
     test3 = softmax(np.array([[-1001,-1002]]))
-    print test3
+    print(test3)
     ans3 = np.array([0.73105858, 0.26894142])
     assert np.allclose(test3, ans3, rtol=1e-05, atol=1e-06)
 
-    print "You should be able to verify these results by hand!\n"
+    print("You should be able to verify these results by hand!\n")
 
 
 def test_softmax():
@@ -76,10 +83,16 @@ def test_softmax():
     This function will not be called by the autograder, nor will
     your tests be graded.
     """
-    print "Running your tests..."
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
+    print("Running your tests...")
+    test1 = np.linspace(-1000, 1000, 20)
+    test2 = np.linspace(-20, 20, 20)
+    result1 = softmax(test1)
+    result2 = softmax(test2)
+
+    array1 = np.array((test1, test2))
+    result3 = softmax(array1)
+    assert np.allclose(result1, result3[0, :])
+    assert np.allclose(result2, result3[1, :])
 
 
 if __name__ == "__main__":
