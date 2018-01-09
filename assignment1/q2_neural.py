@@ -35,13 +35,47 @@ def forward_backward_prop(data, labels, params, dimensions):
     ofs += H * Dy
     b2 = np.reshape(params[ofs:ofs + Dy], (1, Dy))
 
-    ### YOUR CODE HERE: forward propagation
-    raise NotImplementedError
-    ### END YOUR CODE
+    # forward propagation
+    examples = data.shape[0]
+    z2 = np.matmul(data, W1) + b1
+    assert z2.shape == (examples, H)
 
-    ### YOUR CODE HERE: backward propagation
-    raise NotImplementedError
-    ### END YOUR CODE
+    a2 = sigmoid(z2)
+    assert a2.shape == (examples, H)
+
+    z3 = np.matmul(a2, W2) + b2
+    assert z3.shape == (examples, Dy)
+
+    y = softmax(z3)
+    assert y.shape == (examples, Dy)
+
+    partial_cost = -np.sum(labels * np.log(y), axis=1)
+    assert partial_cost.shape == (examples,)
+    cost = np.average(partial_cost)
+
+    ### backward propagation
+    d3_per_example = (y - labels) / examples
+    assert d3_per_example.shape == (examples, Dy)
+
+    # second layer
+    gradW2 = np.matmul(np.transpose(a2), d3_per_example)
+    assert gradW2.shape == (H, Dy)
+
+    gradb2 = np.sum(d3_per_example, axis=0)
+    assert gradb2.shape == (Dy,)
+
+    da2 = np.matmul(d3_per_example, np.transpose(W2))
+    assert da2.shape == (examples, H)
+
+    dz2 = sigmoid_grad(a2) * da2
+    assert dz2.shape == (examples, H)
+
+    # first layer
+    gradW1 = np.matmul(np.transpose(data), dz2)
+    assert gradW1.shape == (Dx, H)
+
+    gradb1 = np.sum(dz2, axis=0)
+    assert gradb1.shape == (H,)
 
     ### Stack gradients (do not modify)
     grad = np.concatenate((gradW1.flatten(), gradb1.flatten(),
@@ -79,9 +113,6 @@ def your_sanity_checks():
     your additional tests be graded.
     """
     print("Running your sanity checks...")
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
 
 
 if __name__ == "__main__":

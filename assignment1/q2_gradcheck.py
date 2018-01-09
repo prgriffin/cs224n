@@ -38,8 +38,6 @@ def gradcheck_naive(f, x):
         numgrad = (fx_up - fx_down) / (2*h)
         x[ix] = vx
 
-        print("numgrad = ", numgrad)
-        print("fx, grad = ", fx, grad)
         # Compare gradients
         reldiff = abs(numgrad - grad[ix]) / max(1, abs(numgrad), abs(grad[ix]))
         if reldiff > 1e-5:
@@ -75,10 +73,6 @@ def your_sanity_checks():
     your additional tests be graded.
     """
     print("Running your sanity checks...")
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
-
 
 if __name__ == "__main__":
     sanity_check()
