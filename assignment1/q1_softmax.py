@@ -30,11 +30,9 @@ def softmax(x):
 
     if len(x.shape) > 1:
         # Matrix
-        print("x = ", x)
         amax = np.amax(x, axis=1)
         amax = np.reshape(amax, (amax.shape[0], 1))
         normalized = x - amax
-        print("normalized = ", normalized)
         e_to_x = np.exp(normalized)
         total = np.sum(e_to_x, axis=1)
         x = e_to_x / np.reshape(total, (total.shape[0], 1))
