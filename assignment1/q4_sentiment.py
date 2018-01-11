@@ -29,6 +29,7 @@ def getArguments():
     return parser.parse_args()
 
 
+
 def getSentenceFeatures(tokens, wordVectors, sentence):
     """
     Obtain the sentence feature for sentiment analysis by averaging its
