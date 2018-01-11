@@ -50,8 +50,9 @@ class StanfordSentiment:
         if hasattr(self, "_sentences") and self._sentences:
             return self._sentences
 
+        print("Loading sentences from ", self.path + "datasetSentences.txt")
         sentences = []
-        with open(self.path + "/datasetSentences.txt", "r") as f:
+        with open(self.path + "/datasetSentences.txt", "r", encoding="utf-8") as f:
             first = True
             for line in f:
                 if first:
@@ -60,7 +61,7 @@ class StanfordSentiment:
 
                 splitted = line.strip().split()[1:]
                 # Deal with some peculiar encoding issues with this file
-                sentences += [[w.lower().decode("utf-8").encode('latin1') for w in splitted]]
+                sentences += [[w.lower().encode('latin1').decode('latin1') for w in splitted]]
 
         self._sentences = sentences
         self._sentlengths = np.array([len(s) for s in sentences])
@@ -246,3 +247,17 @@ class StanfordSentiment:
 
     def sampleTokenIdx(self):
         return self.sampleTable()[random.randint(0, self.tablesize - 1)]
+
+
+
+if __name__ == "__main__":
+    dataset = StanfordSentiment()
+    tokens = dataset.tokens()
+    nWords = len(tokens)
+    i = 0
+    for token in tokens:
+        print(token)
+        i += 1
+        if i > 10:
+            break
+    

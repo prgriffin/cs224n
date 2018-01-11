@@ -22,7 +22,7 @@ def load_saved_params():
             st = iter
 
     if st > 0:
-        with open("saved_params_%d.npy" % st, "r") as f:
+        with open("saved_params_%d.npy" % st, "rb") as f:
             params = pickle.load(f)
             state = pickle.load(f)
         return st, params, state
@@ -31,7 +31,7 @@ def load_saved_params():
 
 
 def save_params(iter, params):
-    with open("saved_params_%d.npy" % iter, "w") as f:
+    with open("saved_params_%d.npy" % iter, "wb") as f:
         pickle.dump(params, f)
         pickle.dump(random.getstate(), f)
 
@@ -83,10 +83,9 @@ def sgd(f, x0, step, iterations, postprocessing=None, useSaved=False,
         # Don't forget to apply the postprocessing after every iteration!
         # You might want to print the progress every few iterations.
 
-        cost = None
-        ### YOUR CODE HERE
-        raise NotImplementedError
-        ### END YOUR CODE
+        cost, grad = f(x)
+        x -= (grad * step)
+        x = postprocessing(x)
 
         if iter % PRINT_EVERY == 0:
             if not expcost:
@@ -131,10 +130,13 @@ def your_sanity_checks():
     your additional tests be graded.
     """
     print("Running your sanity checks...")
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
 
+    intercepts = np.array([1, -2, 3])
+    func = lambda x: (np.sum((x - intercepts) ** 2), 2 * (x - intercepts))
+
+    t4 = sgd(func, np.ones((3,)), 0.01, 1000, PRINT_EVERY=100)
+    print("test 4 result:", t4)
+    assert np.sum(abs(t4 - intercepts)) <= 1e-6
 
 if __name__ == "__main__":
     sanity_check()
