@@ -1,5 +1,5 @@
 import numpy as np
-import tensorflow as tf
+import tensorflow as tf 
 from utils.general_utils import test_all_close
 
 
@@ -23,8 +23,15 @@ def softmax(x):
                   tensor in this problem.
     """
 
-    ### YOUR CODE HERE
-    ### END YOUR CODE
+    n_samples = x.shape[0]
+    n_features = x.shape[1]
+
+    max = tf.reduce_max(x, axis=1, keep_dims=True)
+    e = tf.exp(x - max)
+    s = tf.reduce_sum(e, axis=1, keep_dims=True)
+    scale = 1.0 / s
+    print("e,s,scale: ", e.shape, s.shape, scale.shape)
+    out = scale * e
 
     return out
 
@@ -53,8 +60,7 @@ def cross_entropy_loss(y, yhat):
                     tensor in the problem.
     """
 
-    ### YOUR CODE HERE
-    ### END YOUR CODE
+    out = -tf.reduce_sum(tf.to_float(y) * tf.log(yhat))
 
     return out
 
